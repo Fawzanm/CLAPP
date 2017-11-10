@@ -1,31 +1,33 @@
 package com.example.joelg.clapp;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 /**
  * Created by joelg on 9/11/2017.
  */
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-// deceleration of table info and table colum information
-     private static String DB_PATH = "/data/data/com.example.joelg.clapp/databases/";
-     private static String DB_NAME = "ListTemplate";
-    private static String DB_TABLE = "InfoTable";
-    private static String DB_ID = "JobID";
 
 
-     private SQLiteDatabase sqLiteDatabase;
-
-
-
+    // deceleration of table info and table colum information
+    String DB_PATH = null;
+    private static String DB_NAME = "ListTemplate";
+    private static String DB_TABLE = "infoTable";
+    private static String DB_ID = "_id";
+    private static String DB_JOB_INFO = "jobInfo";
+    private static String DB_IS_DONE = "isdone";
+    private SQLiteDatabase sqLiteDatabase;
     private final Context ListContext;
 
 
@@ -41,12 +43,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public DataBaseHelper (Context context) {
         super (context , DB_NAME, null, 1);
         this.ListContext = context;
-
+        this.DB_PATH = "/data/data" + context.getPackageName() + "/" + "databases/";
+        Log.e("Path 1", DB_PATH);
     }
 
-
   public void createDataBase() throws IOException {
-
       boolean dbExist = checkDatabase();
 
 
@@ -83,11 +84,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
   }
    return checkDB != null ? true : false;
 }
-
-
-
-
-
     /**
      * Copies your database from your local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
@@ -95,17 +91,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * */
 
      private void copyDataBase() throws IOException {
-
          //Open your local db is the input stream
          InputStream myInput = ListContext.getAssets().open(DB_NAME);
-
          // Path to the just created empty db
          String outFileName = DB_PATH + DB_NAME;
-
          // open the empty db as the output stream
          OutputStream myOutput = new FileOutputStream(outFileName);
-
-
          // transfer bytes from the inputfile to the outputfile
          byte [] buffer = new byte[1024];
          int length;
@@ -125,20 +116,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      }
 
 
-     /*this is where the getTask list , is set up
-     *
-     *
+     /*
+     *this is where the getJoblist , is set up.
      * */
-
+   public ArrayList<String> getJobList(){
+       ArrayList<String> JobList = new ArrayList<>();
+       SQLiteDatabase db  = this.getReadableDatabase();
+       Cursor cursor = db.query(DB_TABLE,new String[]{DB_JOB_INFO},null,null,null,null,null);
+       while (cursor.moveToFirst()){
+           int index = cursor.getColumnIndex(DB_JOB_INFO);
+           JobList.add(cursor.getString(index));
+       }
+       cursor.close();
+       db.close();
+       return JobList;
+   }
 
 
 
      @Override
         public synchronized void close(){
-
          if (sqLiteDatabase != null)
          sqLiteDatabase.close();
-    }
+     }
     @Override
     public void onCreate(SQLiteDatabase db) {
 
