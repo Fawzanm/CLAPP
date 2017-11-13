@@ -10,20 +10,30 @@
         android:text=""
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="14dp"
-        android:layout_marginEnd="14dp" />
+        android:layout_alignParentEnd="true" />
     <TextView
         android:id="@+id/Job_Detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Example"
+        android:text="ExampleMessage"
         android:textSize="50px"
-        android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
         android:layout_alignBottom="@+id/IsDone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+    <TextView
+
+        android:text="XX:XX:XX"
+        android:textSize="50px"
+        android:layout_width="235px"
+        android:layout_height="30px"
+        android:layout_alignBottom="@+id/IsDone"
+        android:layout_toLeftOf="@+id/IsDone"
+        android:layout_toStartOf="@+id/IsDone"
+        android:layout_alignTop="@+id/Job_Detail" />
+
+
 
 
 </RelativeLayout>

@@ -43,7 +43,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public DataBaseHelper (Context context) {
         super (context , DB_NAME, null, 1);
         this.ListContext = context;
-        this.DB_PATH = "/data/data" + context.getPackageName() + "/" + "databases/";
+        this.DB_PATH = "/data/data/" + context.getPackageName() + "/" + "databases/";
         Log.e("Path 1", DB_PATH);
     }
 
@@ -52,6 +52,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
    if (dbExist) {
+       
    // do nothing - database already exist
   } else {
 
@@ -68,6 +69,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
        }
        }
   }
+
+
+
+
 
   private boolean checkDatabase(){
       SQLiteDatabase checkDB = null;
@@ -90,7 +95,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * This is done by transfering bytestream.
      * */
 
-     private void copyDataBase() throws IOException {
+     public void copyDataBase() throws IOException {
          //Open your local db is the input stream
          InputStream myInput = ListContext.getAssets().open(DB_NAME);
          // Path to the just created empty db
@@ -110,8 +115,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
      public void openDataBase() throws SQLiteException {
 
+
            String myPath = DB_PATH + DB_NAME;
            sqLiteDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+
          //Opens the database
      }
 
@@ -122,7 +129,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
    public ArrayList<String> getJobList(){
        ArrayList<String> JobList = new ArrayList<>();
        SQLiteDatabase db  = this.getReadableDatabase();
-       Cursor cursor = db.query(DB_TABLE,new String[]{DB_JOB_INFO},null,null,null,null,null);
+       Cursor cursor = db.rawQuery(DB_TABLE,null);
        while (cursor.moveToFirst()){
            int index = cursor.getColumnIndex(DB_JOB_INFO);
            JobList.add(cursor.getString(index));

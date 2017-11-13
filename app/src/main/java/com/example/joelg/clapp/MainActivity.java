@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -13,24 +14,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Import DBhelper Class
-    DataBaseHelper dataBaseHelper;
+
     ArrayAdapter<String> mAdapter;
     ListView NextTask;
+    DataBaseHelper myDbHelper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        // opens the database
-        DataBaseHelper myDbHelper;
         myDbHelper = new DataBaseHelper(this);
-        NextTask = (ListView) findViewById(R.id.NextTask);
 
-        myDbHelper.openDataBase();
-        LoadJobList();
+      // opens the database
         try {
             myDbHelper.createDataBase();
         } catch (IOException ioe) {
@@ -43,12 +39,14 @@ public class MainActivity extends AppCompatActivity {
         } catch (SQLiteException sqle) {
 
             throw sqle;
+    }
 
-        }
 
+        NextTask = (ListView) findViewById(R.id.NextTask);
+        LoadJobList();
     }
         private void LoadJobList() {
-        ArrayList<String> JobList = dataBaseHelper.getJobList();
+        ArrayList<String> JobList = myDbHelper.getJobList();
         if(mAdapter==null){
             mAdapter = new ArrayAdapter<>(this,R.layout.row,R.id.Job_Detail,JobList);
             NextTask.setAdapter(mAdapter);
