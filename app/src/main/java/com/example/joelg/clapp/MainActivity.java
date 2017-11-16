@@ -9,6 +9,8 @@ import android.widget.ListView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,11 +22,14 @@ public class MainActivity extends AppCompatActivity {
     DataBaseHelper myDbHelper;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDbHelper = new DataBaseHelper(this);
+
 
       // opens the database
         try {
@@ -45,8 +50,15 @@ public class MainActivity extends AppCompatActivity {
         NextTask = (ListView) findViewById(R.id.NextTask);
         LoadJobList();
     }
-        private void LoadJobList() {
-        ArrayList<String> JobList = myDbHelper.getJobList();
+
+
+    //
+    //public double RunningTime() {
+      //  Date currentTime = Calendar.getInstance().getTime();
+    //}
+
+    private void LoadJobList() {
+        ArrayList<String> JobList = myDbHelper.getTaskList();
         if(mAdapter==null){
             mAdapter = new ArrayAdapter<>(this,R.layout.row,R.id.Job_Detail,JobList);
             NextTask.setAdapter(mAdapter);

@@ -22,13 +22,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     // deceleration of table info and table colum information
     String DB_PATH = null;
-    private static String DB_NAME = "ListTemplate";
+    private static String DB_NAME = "ListTemplate.db";
     private static String DB_TABLE = "infoTable";
     private static String DB_ID = "_id";
-    private static String DB_JOB_INFO = "jobInfo";
+    private static String DB_TASK_INFO =  "TaskInfo";
     private static String DB_IS_DONE = "isdone";
+    private static int VERSION = 1;
     private SQLiteDatabase sqLiteDatabase;
     private final Context ListContext;
+
+    //fawzanm@gmail.com
 
 
 
@@ -41,9 +44,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      */
 
     public DataBaseHelper (Context context) {
-        super (context , DB_NAME, null, 1);
+        super (context , DB_NAME, null,VERSION );
         this.ListContext = context;
-        this.DB_PATH = "/data/data/" + context.getPackageName() + "/" + "databases/";
+        this.DB_PATH = "/data/data/" + context.getPackageName() + "/" + "databases/" ;
         Log.e("Path 1", DB_PATH);
     }
 
@@ -119,24 +122,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
            String myPath = DB_PATH + DB_NAME;
            sqLiteDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
+         Log.d("Application_DEBUG", myPath);
          //Opens the database
      }
+
+     //SugarORM
+    //GreenDao
 
 
      /*
      *this is where the getJoblist , is set up.
      * */
-   public ArrayList<String> getJobList(){
-       ArrayList<String> JobList = new ArrayList<>();
+   public ArrayList<String> getTaskList(){
+       ArrayList<String> TaskList = new ArrayList<>();
        SQLiteDatabase db  = this.getReadableDatabase();
-       Cursor cursor = db.rawQuery(DB_TABLE,null);
+       Cursor cursor = db.rawQuery("SELECT * FROM " + DB_TABLE,null);
        while (cursor.moveToFirst()){
-           int index = cursor.getColumnIndex(DB_JOB_INFO);
-           JobList.add(cursor.getString(index));
+           int index = cursor.getColumnIndex(DB_TASK_INFO);
+           TaskList.add(cursor.getString(index));
        }
        cursor.close();
        db.close();
-       return JobList;
+       return TaskList;
    }
 
 
